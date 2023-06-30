@@ -1,0 +1,23 @@
+nav {
+	border-top: 1px solid white;
+	margin-top: 1em;
+	padding: .5em;
+	background-color: hsl(var(--hue), var(--sat), 30%, 0);
+	color: #fff;
+	ul {
+		display: flex;
+		list-style-type: none;
+		li {
+			a {
+				display: flex;
+				padding: .5em;
+				text-decoration: none;
+				border-radius: .25em;
+				&:hover {
+					color: #ff0;
+					background-color: #fff4;
+				}
+			}
+		}
+	}
+}
