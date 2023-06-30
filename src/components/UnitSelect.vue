@@ -1,7 +1,7 @@
 <template>
 	<select :name="name" :id="name">
 		<option value="in">in</option>
-		<option value="ft">ft</option>
+		<option value="ft" selected>ft</option>
 		<option value="cm">cm</option>
 		<option value="m">m</option>
 	</select>
