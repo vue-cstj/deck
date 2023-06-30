@@ -1,0 +1,17 @@
+#app {
+	min-height: 100%;
+	display: grid;
+	grid-template-rows: auto auto 1fr auto;
+	> header, > footer {
+		grid-column: 1 / -1;
+		background-color: hsl(var(--hue), var(--sat), 25%);
+		color: hsl(var(--hue), var(--sat), 100%);
+		padding: 1em;
+	}
+	@import "nav";
+	main {
+		background-color: hsl(var(--hue), var(--sat), 15%);
+		color: hsl(var(--hue), var(--sat), 100%);
+		padding: 1em;
+	}
+}
