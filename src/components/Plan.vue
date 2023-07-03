@@ -18,9 +18,9 @@
 				<feBlend in="papier4" in2="papier2" />
 			</filter>
 			<filter id="trait" x="-.03" y="-.03" width="1.06" height="1.06" color-interpolation-filters="sRGB">
-				<feTurbulence baseFrequency="0.1" result="result1" type="fractalNoise" />
-				<feColorMatrix result="trait1" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 1 1 1 -1.2" />
-				<feGaussianBlur in="SourceGraphic" result="trait2" stdDeviation="1" />
+				<feTurbulence baseFrequency="0.5" type="fractalNoise" />
+				<feColorMatrix result="trait1" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 1 1 2 -1.5" />
+				<feGaussianBlur in="SourceGraphic" result="trait2" stdDeviation=".3" />
 				<feComposite in="trait2" in2="trait1" operator="in" />
 			</filter>
 		</defs>
@@ -29,24 +29,15 @@
 			<rect class="frame" :x="frame.x" :y="frame.y" :width="frame.width" :height="frame.height" fill="#fff" />
 			<rect class="plank" :x="frame.x" :y="(i - 1) * (plank.height + plank.gap) + frame.y" v-for="i in plank.n" :width="plank.width" :height="plank.height" />
 		</g>
-		<g opacity=".7" class="dimensions" stroke-width="2" stroke="#FFF" marker-start="url(#Start)" marker-end="url(#Stop)">
-			<g class="length" :transform="`translate(${frame.x}, ${frame.y - margin / 2})`">
-				<path :d="`M 0 0 ${(frame.width - 100) / 2} 0 M${(frame.width + 100) / 2} 0 ${frame.width} 0`" fill="none" />
-				<text :x="frame.width / 2" y="0">
-					<tspan>{{ dimensions.length }}ft</tspan>
-				</text>
-			</g>
-			<g class="height" :transform="`translate(${frame.x - margin / 2}, ${frame.height + (canevas.height - frame.height) / 2}) rotate(-90)`">
-				<path :d="`M 0 0 ${(frame.height - 100) / 2} 0 M${(frame.height + 100) / 2} 0 ${frame.height} 0`" fill="none" />
-				<text :x="frame.height / 2" y="0">
-					<tspan transform="rotate(180)">{{ dimensions.depth }}ft</tspan>
-				</text>
-			</g>
+		<g class="dimensions" stroke-width="2" stroke="#FFF" marker-start="url(#Start)" marker-end="url(#Stop)">
+			<dimension-component :debut="{x: frame.x, y:frame.y - margin / 2}" :fin="{x: frame.x + frame.width, y:frame.y - margin / 2}">{{ dimensions.length }} feet</dimension-component>
+			<dimension-component :debut="{x: frame.x - margin / 2, y: (frame.height + canevas.height) / 2}" :fin="{x: frame.x - margin / 2, y: (canevas.height - frame.height) / 2}">{{ dimensions.depth }}feet</dimension-component>
 		</g>
 	</svg>
 </template>
 
 <script setup>
+import DimensionComponent from './Dimension.vue';
 import { ref, computed } from 'vue';
 const margin = 50;
 const props = defineProps({
@@ -83,7 +74,6 @@ const props = defineProps({
 	},
 });
 const ratio = computed(() => {
-
 	return props.dimensions.length / props.dimensions.depth <= props.canevas.width / props.canevas.height
 		? (props.canevas.height - margin * 2) / props.dimensions.depth
 		: (props.canevas.width - margin * 2) / props.dimensions.length;
@@ -102,7 +92,6 @@ const frame = computed(() => {
 		height,
 	};
 });
-console.log(frame.value);
 const plank = computed(() => {
 	const width = frame.value.width;
 	const height = props.plank.depth * ratio.value;
@@ -119,7 +108,6 @@ const plank = computed(() => {
 		gap,
 	};
 });
-console.log(plank.value);
 </script>
 
 <style lang="scss">
@@ -134,20 +122,12 @@ console.log(plank.value);
 .traits {
 	filter: url(#trait);
 }
-
+.dimension {
+	filter: url(#trait);
+}
 .papier {
 	filter: url(#papier);
 	fill: hsl(216, 74%, 20%);
-}
-
-text {
-	text-rendering: geometricPrecision;
-	font-size: 16pt;
-	text-anchor: middle;
-	dominant-baseline: middle;
-	fill: #ffffff;
-	font-family: Lucida Console;
-	stroke: none;
 }
 
 .plank {
